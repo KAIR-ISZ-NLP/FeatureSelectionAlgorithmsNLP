@@ -13,5 +13,6 @@
     * usunięcie recenzji poniżej 20 słów
     * usunięcie polskich stopword'ów
     * lemantyzacja
-3. Ekstrakcja cech metodą TFIDF
+3. Ekstrakcja cech metodą TFIDF z użyciem unigramów i bigramów.
+4. Selekcja cech wybranymi metodami, czyli Chi$^@$
 
