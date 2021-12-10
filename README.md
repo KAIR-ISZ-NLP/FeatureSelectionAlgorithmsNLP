@@ -18,12 +18,12 @@
 5. Użycie wybranych klasyfikatorów (MultinomialNB, SVC,LogisticRegression, RandomForestClassifier) z grid searchem i porównanie wyników dla każdej metody.
 (pliki feature_selection_with_CHI2.ipynb, feature_selection_with_RFE.ipynb, feature_selection_with_LASSO.ipynb, feature_selection_with_ANOVA.ipynb)
 
-Aktualny wygląd wyników:
+Aktualny wygląd wyników (accuracy), w nawiasie koło wyniku liczba cech po ich selekcji (początkowo było ich około 116000):
 
 |                         | BRAK  | Chi^2 | ANOVA | RFE   | L1    |
 |-------------------------|-------|-------|-------|-------|-------|
-| MultinomialNB           | 0.86  | 0.83  | 0.84  | 0.85  | 0.84  |
-| SVC                     | 0.84  | 0.85  | 0.84  | 0.86  | 0.85  |
-| LogisticRegression      | 0.84  | 0.86  | 0.85  | 0.87  | 0.85  |
-| RandomForestClassifier  | 0.83  | 0.82  | 0.82  | 0.82  | 0.82  |
+| MultinomialNB           | 0.86  | 0.83 (2000)  | 0.84 (2000)  | 0.85 (1500)  | 0.84 (350)   |
+| SVC                     | 0.84  | 0.85 (1500)  | 0.84 (1000)  | 0.86 (2000)  | 0.85 (434)   |
+| LogisticRegression      | 0.84  | 0.86 (2500)  | 0.85 (1000)  | 0.87 (2000)  | 0.85 (434)   |
+| RandomForestClassifier  | 0.83  | 0.82 (500)   | 0.82 (2000)  | 0.82 (1500)  | 0.82 (1301)  |
 
