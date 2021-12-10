@@ -20,8 +20,7 @@
 
 Aktualny wygląd wyników:
 
-|                         |  BRAK |Filtry       | Wrappery      |Embedded       |
-|                         |       | Chi^2 | ANOVA | RFE   | L1    |
+|                         | BRAK  | Chi^2 | ANOVA | RFE   | L1    |
 |-------------------------|-------|-------|-------|-------|-------|
 | MultinomialNB           | 0.86  | 0.83  | 0.84  | 0.85  | 0.84  |
 | SVC                     | 0.84  | 0.85  | 0.84  | 0.86  | 0.85  |
