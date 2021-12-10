@@ -1,5 +1,5 @@
 ## Feature selection algorithms in NLP
-#Praca inżynierska - Norbert Sak
+# Praca inżynierska - Norbert Sak
 
 1. Zebranie danych - pobranie recenzji gier z kategorii RPG z API Steam'a (plik GetSteamReviews.ipynb)
 2. Preprocessing zebranych danych:
