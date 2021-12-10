@@ -14,5 +14,17 @@
     * usunięcie polskich stopword'ów
     * lemantyzacja
 3. Ekstrakcja cech metodą TFIDF z użyciem unigramów i bigramów.
-4. Selekcja cech wybranymi metodami, czyli Chi$^@$
+4. Selekcja cech wybranymi metodami - filtry -> Chi$^2$ i ANOVA(?), wrappery -> RFE (Recursive Feature Elimination) i embedded -> regularyzacja L1.
+5. Użycie wybranych klasyfikatorów (MultinomialNB, SVC,LogisticRegression, RandomForestClassifier) z grid searchem i porównanie wyników dla każdej metody.
+(pliki feature_selection_with_CHI2.ipynb, feature_selection_with_RFE.ipynb, feature_selection_with_LASSO.ipynb, feature_selection_with_ANOVA.ipynb)
+
+Aktualny wygląd wyników:
+
+|                         |       |       |       |       |       |   |   |   |   |
+|-------------------------|-------|-------|-------|-------|-------|---|---|---|---|
+|                         |       | Chi^2 | ANOVA | RFE   | L1    |   |   |   |   |
+| MultinomialNB           | 0.86  | 0.83  | 0.84  | 0.85  | 0.84  |   |   |   |   |
+| SVC                     | 0.84  | 0.85  | 0.84  | 0.86  | 0.85  |   |   |   |   |
+| LogisticRegression      | 0.84  | 0.86  | 0.85  | 0.87  | 0.85  |   |   |   |   |
+| RandomForestClassifier  | 0.83  | 0.82  | 0.82  | 0.82  | 0.82  |   |   |   |   |
 
