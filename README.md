@@ -12,7 +12,7 @@
     * lowercase wszystkich znaków
     * usunięcie recenzji poniżej 20 słów
     * usunięcie polskich stopword'ów
-    * lemantyzacja
+    * lematyzacja
 3. Ekstrakcja cech metodą TFIDF z użyciem unigramów i bigramów.
 4. Selekcja cech wybranymi metodami - filtry -> Chi^2 i ANOVA(?), wrappery -> RFE (Recursive Feature Elimination) i embedded -> regularyzacja L1.
 5. Użycie wybranych klasyfikatorów (MultinomialNB, SVC,LogisticRegression, RandomForestClassifier) z grid searchem i porównanie wyników dla każdej metody.
