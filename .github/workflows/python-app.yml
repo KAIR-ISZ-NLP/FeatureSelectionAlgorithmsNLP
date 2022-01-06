@@ -33,4 +33,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with unit tests
       run: |
-        python -m unittest discover Project -vvv --rednose
+        nosetests --verbosity=2 --rednose
+        python -m unittest discover Project -vvv
