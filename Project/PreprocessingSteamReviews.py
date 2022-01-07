@@ -17,15 +17,15 @@ class PreprocessingSteamReviews():
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_whitespace)
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_non_alphanumeric_chracters)
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_links)
-        self.remove_reviews_with_no_alphanumeric_items()
-        self.remove_non_polish_reviews()
+        self.df_reviews = self.remove_reviews_with_no_alphanumeric_items(self.df_reviews)
+        self.df_reviews = self.remove_non_polish_reviews(self.df_reviews)
         self.df_reviews = self.lowercase_all(self.df_reviews)
         self.df_reviews = self.tokenize_all(self.df_reviews)
         self.remove_reviews_under_n_words(20)
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_polish_stopwords)
         
-        self.morf = morfeusz2.Morfeusz()
-        self.df_reviews['review'] = self.df_reviews['review'].apply(self.lemmatisation, self.morf)
+        morf = morfeusz2.Morfeusz()
+        self.df_reviews['review'] = self.df_reviews['review'].apply(self.lemmatisation, args=(morf,))
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_polish_stopwords)
         
         self.df_reviews['review'] = self.df_reviews['review'].apply(" ".join)
@@ -61,15 +61,17 @@ class PreprocessingSteamReviews():
         text = regex.sub(' ', text)
         return text
     
-    def remove_reviews_with_no_alphanumeric_items(self):
-        for row, data in self.df_reviews.T.iteritems():
+    def remove_reviews_with_no_alphanumeric_items(self, df):
+        for row, data in df.T.iteritems():
             if not any(c.isalpha() for c in data['review']):
-                self.df_reviews.drop([row], inplace=True)
+                df.drop([row], inplace=True)
+        return df
                 
-    def remove_non_polish_reviews(self):
-        for row, data in self.df_reviews.T.iteritems():
+    def remove_non_polish_reviews(self, df):
+        for row, data in df.T.iteritems():
             if detect(data['review']) != 'pl':
-                self.df_reviews.drop([row], inplace=True)
+                df.drop([row], inplace=True)
+        return df
                 
     def lowercase_all(self, df):
         df['review'] = df['review'].str.lower()
