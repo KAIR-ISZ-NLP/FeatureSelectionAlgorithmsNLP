@@ -50,7 +50,7 @@ class PreprocessingSteamReviews():
         """
         df['len'] = df['review'].str.len()
         df = df[df['len'] > n]
-        df.drop(['len'], inplace=True, axis=1)
+        df = df.drop(['len'], axis=1)
         return df
         
     def remove_reviews_under_n_words(self, n: int, df: pd.DataFrame) -> pd.DataFrame:
@@ -64,7 +64,7 @@ class PreprocessingSteamReviews():
         """
         df['len'] = df['review'].str.len()
         df = df[df['len'] > n]
-        df.drop(['len'], inplace=True, axis=1)
+        df = df.drop(['len'], axis=1)
         return df
     
     def remove_newlines_tabs(self, text: str) -> str:
