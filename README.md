@@ -27,3 +27,4 @@ Aktualny wygląd wyników (accuracy), w nawiasie koło wyniku liczba cech po ich
 | LogisticRegression      | 0.84  | 0.86 (2500)  | 0.85 (1000)  | 0.87 (2000)  | 0.85 (434)   |
 | RandomForestClassifier  | 0.83  | 0.82 (500)   | 0.82 (2000)  | 0.82 (1500)  | 0.82 (1301)  |
 
+Aplikacja webowa postawiona na Heroku -> https://predict-game-review.herokuapp.com/
