@@ -55,7 +55,7 @@ class PreprocessingSteamReviews():
         
     def remove_reviews_under_n_words(self, n: int, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Metoda usuwająca wszystkie recenzje z df, które posiadają poniżej n słów.
+        Metoda usuwająca wszystkie recenzje (po tokenizacji) z df, które posiadają poniżej n słów.
         Parameters:
             n (int): Liczba słów
             df (pd.DataFrame): Wejściowy DataFrame
@@ -63,7 +63,7 @@ class PreprocessingSteamReviews():
             pd.DataFrame: Przeprocesowany DataFrame
         """
         df['len'] = df['review'].str.len()
-        df = df[self.df_reviews['len'] > n]
+        df = df[df['len'] > n]
         df.drop(['len'], inplace=True, axis=1)
         return df
     

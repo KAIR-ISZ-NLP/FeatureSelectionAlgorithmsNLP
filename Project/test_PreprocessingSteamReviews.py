@@ -86,6 +86,28 @@ class TestPreprocessingSteamReviews(unittest.TestCase):
         self.assertEqual(result_with.empty, expected_with.empty)
         self.assertEqual(result_without.empty, expected_without.empty)
 
+    def test_remove_reviews_under_n_chars(self):
+        n = 20
+        input_under = pd.DataFrame(data=["polecam ten tytuł"], columns=['review'])
+        input_above = pd.DataFrame(data=["bardzo polecam ten tytuł"], columns=['review'])
+        expected_under = pd.DataFrame(data=[], columns=['review'])
+        expected_above = pd.DataFrame(data=["bardzo polecam ten tytuł z całego serca"], columns=['review'])
+        result_under = PreprocessingSteamReviews.remove_reviews_under_n_chars(self, n, input_under)
+        result_above = PreprocessingSteamReviews.remove_reviews_under_n_chars(self, n, input_above)
+        self.assertEqual(result_under.empty, expected_under.empty)
+        self.assertEqual(result_above.empty, expected_above.empty)
+
+    def test_remove_reviews_under_n_words(self):
+        n = 5
+        input_under = pd.DataFrame(data={'review': [["polecam", "ten", "tytuł"]]})
+        input_above = pd.DataFrame(data={'review': [["polecam", "ten", "tytuł", "z", "całego", "serca"]]})
+        expected_under = pd.DataFrame(data=[], columns=['review'])
+        expected_above = pd.DataFrame(data={'review': [["polecam", "ten", "tytuł", "z", "całego", "serca"]]})
+        result_under = PreprocessingSteamReviews.remove_reviews_under_n_words(self, n, input_under)
+        result_above = PreprocessingSteamReviews.remove_reviews_under_n_words(self, n, input_above)
+        self.assertEqual(result_under.empty, expected_under.empty)
+        self.assertEqual(result_above.empty, expected_above.empty)
+
 
 if __name__ == '__main__':
     unittest.main()
