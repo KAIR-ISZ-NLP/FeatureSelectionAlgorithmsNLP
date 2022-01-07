@@ -115,4 +115,4 @@ if __name__ == "__main__":
     df2 = df_preprocessed[df_preprocessed['voted_up'] == True][:len_f]
     df_preprocessed = pd.concat([df1,df2])
     df_preprocessed = df_preprocessed.sample(frac=1)
-    df_preprocessed.to_excel("game_reviews_preprocessed____.xlsx")
+    df_preprocessed.to_excel("game_reviews_preprocessed.xlsx")
