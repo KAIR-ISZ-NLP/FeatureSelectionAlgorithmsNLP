@@ -8,10 +8,18 @@ import unidecode
 
 
 class PreprocessingSteamReviews():
-    def preprocess(self, df_reviews):
+    """
+    Klasa odpowiedzialna za preprocessing recenzji, aby nadawały się one do użycia w modelach uczenia maszynowego.
+    """
+    def preprocess(self, df_reviews: pd.DataFrame) -> None:
+        """
+        Metoda odpowiadająca za wykonanie całego procesu preprocessigu wejściowego DataFrame.
+        Parameters:
+            text (list[str]): Wejściowy DataFrame
+        """
         self.df_reviews = df_reviews
         
-        self.remove_reviews_under_99_chars(99)
+        self.df_reviews = self.remove_reviews_under_n_chars(99, self.df_reviews)
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_newlines_tabs)
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.strip_html_tags)
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_whitespace)
@@ -21,7 +29,7 @@ class PreprocessingSteamReviews():
         self.df_reviews = self.remove_non_polish_reviews(self.df_reviews)
         self.df_reviews = self.lowercase_all(self.df_reviews)
         self.df_reviews = self.tokenize_all(self.df_reviews)
-        self.remove_reviews_under_n_words(20)
+        self.df_reviews = self.remove_reviews_under_n_words(20, self.df_reviews)
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_polish_stopwords)
         
         morf = morfeusz2.Morfeusz()
@@ -29,59 +37,140 @@ class PreprocessingSteamReviews():
         self.df_reviews['review'] = self.df_reviews['review'].apply(self.remove_polish_stopwords)
         
         self.df_reviews['review'] = self.df_reviews['review'].apply(" ".join)
-        self.df_reviews.drop(['len'], inplace=True, axis=1)
-        self.df_reviews.drop(['len2'], inplace=True, axis=1)
         
         
-    def remove_reviews_under_99_chars(self, n):
-        self.df_reviews['len'] = self.df_reviews['review'].str.len()
-        self.df_reviews = self.df_reviews[self.df_reviews['len'] > n]
+    def remove_reviews_under_n_chars(self, n: int, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Metoda usuwająca wszystkie recenzje z df, które posiadają poniżej n znaków.
+        Parameters:
+            n (int): Liczba znaków
+            df (pd.DataFrame): Wejściowy DataFrame
+        Returns:
+            pd.DataFrame: Przeprocesowany DataFrame
+        """
+        df['len'] = df['review'].str.len()
+        df = df[df['len'] > n]
+        df.drop(['len'], inplace=True, axis=1)
+        return df
         
-    def remove_reviews_under_n_words(self, n):
-        self.df_reviews['len2'] = self.df_reviews['review'].str.len()
-        self.df_reviews = self.df_reviews[self.df_reviews['len2'] > n]
+    def remove_reviews_under_n_words(self, n: int, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Metoda usuwająca wszystkie recenzje z df, które posiadają poniżej n słów.
+        Parameters:
+            n (int): Liczba słów
+            df (pd.DataFrame): Wejściowy DataFrame
+        Returns:
+            pd.DataFrame: Przeprocesowany DataFrame
+        """
+        df['len'] = df['review'].str.len()
+        df = df[self.df_reviews['len'] > n]
+        df.drop(['len'], inplace=True, axis=1)
+        return df
     
-    def remove_newlines_tabs(self, text):
+    def remove_newlines_tabs(self, text: str) -> str:
+        """
+        Metoda usuwająca wszystkie znaki nowej linii oraz tabulacji z recenzji.
+        Parameters:
+            text (str): Recenzja wejściowa
+        Returns:
+            str: Przeprocesowana recenzja
+        """
         formatted_text = text.replace('\\n', ' ').replace('\n', ' ').replace('\t',' ').replace('\\', ' ')
         return formatted_text
 
-    def strip_html_tags(self, text):
+    def strip_html_tags(self, text: str) -> str:
+        """
+        Metoda usuwająca wszystkie elementy składni języka HTML z recenzji.
+        Parameters:
+            text (str): Recenzja wejściowa
+        Returns:
+            str: Przeprocesowana recenzja
+        """
         soup = BeautifulSoup(text, "html.parser")
         stripped_text = soup.get_text(separator=" ")
         return stripped_text
 
-    def remove_whitespace(self, text):
+    def remove_whitespace(self, text: str) -> str:
+        """
+        Metoda usuwająca nadmiar spacji z recenzji.
+        Parameters:
+            text (str): Recenzja wejściowa
+        Returns:
+            str: Przeprocesowana recenzja
+        """
         pattern = re.compile(r'\s+') 
         Without_whitespace = re.sub(pattern, ' ', text)
         text = Without_whitespace.replace('?', ' ? ').replace(')', ') ')
         return text
 
-    def remove_non_alphanumeric_chracters(self, text):
+    def remove_non_alphanumeric_chracters(self, text: str) -> str:
+        """
+        Metoda usuwająca znaki, które nie są alfanumeryczne z recenzji.
+        Parameters:
+            text (str): Recenzja wejściowa
+        Returns:
+            str: Przeprocesowana recenzja
+        """
         regex = re.compile('[^a-zA-ZAaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż ]')
         text = regex.sub(' ', text)
         return text
     
-    def remove_reviews_with_no_alphanumeric_items(self, df):
+    def remove_reviews_with_no_alphanumeric_items(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Metoda usuwająca wszystkie recenzje z df, które nie zawierają żadnych znaków alfanumerycznych.
+        Parameters:
+            df (pd.DataFrame): Wejściowy DataFrame
+        Returns:
+            pd.DataFrame: Przeprocesowany DataFrame
+        """
         for row, data in df.T.iteritems():
             if not any(c.isalpha() for c in data['review']):
                 df.drop([row], inplace=True)
         return df
                 
-    def remove_non_polish_reviews(self, df):
+    def remove_non_polish_reviews(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Metoda usuwająca wszystkie recenzje z df, których językiem dominującym nie jest polski.
+        Parameters:
+            df (pd.DataFrame): Wejściowy DataFrame
+        Returns:
+            pd.DataFrame: Przeprocesowany DataFrame
+        """
         for row, data in df.T.iteritems():
             if detect(data['review']) != 'pl':
                 df.drop([row], inplace=True)
         return df
                 
-    def lowercase_all(self, df):
+    def lowercase_all(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Metoda zamieniająca wszystkie znaki na małe w df.
+        Parameters:
+            df (pd.DataFrame): Wejściowy DataFrame
+        Returns:
+            pd.DataFrame: Przeprocesowany DataFrame
+        """
         df['review'] = df['review'].str.lower()
         return df
         
-    def tokenize_all(self, df):
+    def tokenize_all(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Metoda zamieniająca wszystkie recenzje w df na listę słów, gdzie separatorem jest spacja.
+        Parameters:
+            df (pd.DataFrame): Wejściowy DataFrame
+        Returns:
+            pd.DataFrame: Przeprocesowany DataFrame
+        """
         df['review'] = df['review'].str.split()
         return df
     
-    def remove_polish_stopwords(self, text):
+    def remove_polish_stopwords(self, text: list[str]) -> list[str]:
+        """
+        Metoda usuwająca polskie stopwordy z recenzji.
+        Parameters:
+            text (list[str]): Recenzja wejściowa
+        Returns:
+            list[str]: Przeprocesowana recenzja
+        """
         stopwords = []
         with open("polish.stopwords.txt", encoding = 'utf-8') as f:
             for line in f:
@@ -90,7 +179,14 @@ class PreprocessingSteamReviews():
         words = [word for word in text if word.lower() not in stopwords]
         return words
     
-    def lemmatisation(self, text, morf):
+    def lemmatisation(self, text: list[str], morf) -> list[str]:
+        """
+        Metoda lematyzyjąca recenzje.
+        Parameters:
+            text (list[str]): Recenzja wejściowa
+        Returns:
+            list[str]: Przeprocesowana recenzja
+        """
         res = []
         for i in text:
             analysis = morf.analyse(i)
@@ -99,11 +195,19 @@ class PreprocessingSteamReviews():
             res.append(x)
         return res
     
-    def remove_links(self, text):
+    def remove_links(self, text) -> str:
+        """
+        Metoda usuwająca linki z recenzji.
+        Parameters:
+            text (str): Recenzja wejściowa
+        Returns:
+            str: Przeprocesowana recenzja
+        """
         remove_https = re.sub(r'http\S+', '', text)
         remove_com = re.sub(r"\ [A-Za-z]*\.com", " ", remove_https)
         remove_pl = re.sub(r"\ [A-Za-z]*\.pl", " ", remove_com)
         return remove_pl
+
 
 if __name__ == "__main__":
     df = pd.read_excel("game_reviews.xlsx", index_col=0)
