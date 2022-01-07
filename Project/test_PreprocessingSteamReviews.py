@@ -11,7 +11,7 @@ import unittest
 
 class TestPreprocessingSteamReviews(unittest.TestCase):
 
-    def test_upper(self):
+    def test_strip_html_tags(self):
         input = '<h2>Bardzo dobra gra<h2>'
         expected = 'Bardzo dobra gra'
         result = PreprocessingSteamReviews.strip_html_tags(self, input)
@@ -65,6 +65,26 @@ class TestPreprocessingSteamReviews(unittest.TestCase):
         expected = pd.DataFrame(data={'review': [["gra", "mnie", "zachwyciła", "bardzo"]]})
         result = PreprocessingSteamReviews.tokenize_all(self, input)
         self.assertEqual(result['review'][0], expected['review'][0])
+
+    def test_remove_non_polish_reviews(self):
+        input_eng = pd.DataFrame(data=["this game looks very good"], columns=['review'])
+        input_pl = pd.DataFrame(data=["ta gra wygląda bardzo dobrze"], columns=['review'])
+        expected_eng = pd.DataFrame(data=[], columns=['review'])
+        expected_pl = pd.DataFrame(data=["ta gra wygląda bardzo dobrze"], columns=['review'])
+        result_eng = PreprocessingSteamReviews.remove_non_polish_reviews(self, input_eng)
+        result_pl = PreprocessingSteamReviews.remove_non_polish_reviews(self, input_pl)
+        self.assertEqual(result_eng.empty, expected_eng.empty)
+        self.assertEqual(result_pl.empty, expected_pl.empty)
+
+    def test_remove_reviews_with_no_alphanumeric_items(self):
+        input_with = pd.DataFrame(data=["polecam ten tytuł"], columns=['review'])
+        input_without = pd.DataFrame(data=["<3!!!!!"], columns=['review'])
+        expected_with = pd.DataFrame(data=["polecam ten tytuł"], columns=['review'])
+        expected_without = pd.DataFrame(data=[], columns=['review'])
+        result_with = PreprocessingSteamReviews.remove_reviews_with_no_alphanumeric_items(self, input_with)
+        result_without = PreprocessingSteamReviews.remove_reviews_with_no_alphanumeric_items(self, input_without)
+        self.assertEqual(result_with.empty, expected_with.empty)
+        self.assertEqual(result_without.empty, expected_without.empty)
 
 
 if __name__ == '__main__':
