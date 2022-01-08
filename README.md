@@ -28,3 +28,5 @@ Aktualny wygląd wyników (accuracy), w nawiasie koło wyniku liczba cech po ich
 | RandomForestClassifier  | 0.83  | 0.82 (500)   | 0.82 (2000)  | 0.82 (1500)  | 0.82 (1301)  |
 
 Aplikacja webowa postawiona na Heroku -> https://predict-game-review.herokuapp.com/
+
+Link do repo, z którego została postawiona aplikacja na Heroku -> https://github.com/nsak99/flask-webapp-nlp-project
