@@ -210,13 +210,14 @@ class PreprocessingSteamReviews():
 
 
 if __name__ == "__main__":
-    df = pd.read_excel("game_reviews.xlsx", index_col=0)
-    pre = PreprocessingSteamReviews()
-    pre.preprocess(df)
-    df_preprocessed = pre.df_reviews
-    df1 = df_preprocessed[df_preprocessed['voted_up'] == False]
-    len_f = len(df_preprocessed[df_preprocessed['voted_up'] == False])
-    df2 = df_preprocessed[df_preprocessed['voted_up'] == True][:len_f]
-    df_preprocessed = pd.concat([df1,df2])
-    df_preprocessed = df_preprocessed.sample(frac=1)
-    df_preprocessed.to_excel("game_reviews_preprocessed.xlsx")
+    print(PreprocessingSteamReviews.strip_html_tags.__doc__)
+    # df = pd.read_excel("game_reviews.xlsx", index_col=0)
+    # pre = PreprocessingSteamReviews()
+    # pre.preprocess(df)
+    # df_preprocessed = pre.df_reviews
+    # df1 = df_preprocessed[df_preprocessed['voted_up'] == False]
+    # len_f = len(df_preprocessed[df_preprocessed['voted_up'] == False])
+    # df2 = df_preprocessed[df_preprocessed['voted_up'] == True][:len_f]
+    # df_preprocessed = pd.concat([df1,df2])
+    # df_preprocessed = df_preprocessed.sample(frac=1)
+    # df_preprocessed.to_excel("game_reviews_preprocessed.xlsx")
