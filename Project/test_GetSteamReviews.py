@@ -5,7 +5,7 @@ import pandas as pd
 from GetSteamReviews import get_reviews, get_n_appids, get_n_reviews
 
 
-class TestPreprocessingSteamReviews(unittest.TestCase):
+class TestGetSteamReviews(unittest.TestCase):
     def test_get_n_appids(self):
         n = 5
         result = get_n_appids(n)
