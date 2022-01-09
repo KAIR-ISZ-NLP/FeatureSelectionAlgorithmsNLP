@@ -1,6 +1,8 @@
 ## Feature selection algorithms in NLP
 # Praca inżynierska - Norbert Sak
 
+Link do repozytorium na GitHubie z całym projektem -> www.github.com/KAIR-ISZ-NLP/FeatureSelectionAlgorithmsNLP
+
 Aplikacja webowa postawiona na Heroku -> https://predict-game-review.herokuapp.com/
 
 Link do repo, z którego została postawiona aplikacja na Heroku -> https://github.com/nsak99/flask-webapp-nlp-project
